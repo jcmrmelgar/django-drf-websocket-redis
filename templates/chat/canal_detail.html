@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block ngApp %}ng-app="chat"{% endblock %}
+
+{% block content %}
+<h1>{{ object }} <a class="badge" href="{% url 'canales' %}">Volver</a></h1>
+
+<div ng-controller="CanalController">
+	<input type="hidden" id="canal-id" value="{{ object.id }}">
+	<input type="hidden" id="ws-url" value="{{ WEBSOCKET_URI }}canal-{{ object.id }}?subscribe-broadcast">
+	<input type="hidden" id="ws-hb" value={{ WS4REDIS_HEARTBEAT }}>
+
+{% verbatim %}
+<pre id="mensaje-list">
+<span ng-repeat="mensaje in mensajes | orderBy: 'fecha'"><strong>{{ mensaje.usuario.username }}</strong>: {{ mensaje.contenido }}
+</span>
+</pre>
+{% endverbatim %}
+
+	{% if request.user.is_authenticated %}
+	<form name="mensajeForm" id="mensajeForm" class="form-inline" role="form" ng-submit="enviarMensaje(mensajeForm.$valid)">
+
+		<div class="form-group">
+			<label class="sr-only" for="">Mensaje</label>
+			<input type="text" ng-model="mensaje.contenido" class="form-control" id="" placeholder="Escribe tu mensaje" required="required">
+		</div>
+
+		<button type="submit" ng-disabled="mensajeForm.$invalid" class="btn btn-primary">Enviar</button>
+	</form>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-resource.min.js"></script>
+<script src="{% static 'js/ws4redis.js' %}"></script>
+<script src="{% static 'js/chat.js' %}"></script>
+{% endblock %}
