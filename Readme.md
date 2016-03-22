@@ -12,7 +12,6 @@ Disclamer: No se ha realizado ninguna prueba de stress.
 - Seguridad del lado del servidor pues.
 - Únicamente usuarios registrados pueden escribir mensajes.
 - Incluye la vista de lista de canales y la vista de detalle del canal
-- 
 
 # Uso
 1. Descarga este repositorio
